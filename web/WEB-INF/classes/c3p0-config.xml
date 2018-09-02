@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<c3p0-config>
+    <!-- 这是默认配置信息 -->
+    <default-config>
+        <!-- 连接四大参数配置 -->
+        <property name="jdbcUrl">jdbc:mysql://localhost/onlinejudge?useSSL=false&amp;serverTimezone=UTC</property>
+        <property name="driverClass">com.mysql.cj.jdbc.Driver</property>
+        <property name="user">root</property>
+        <property name="password">986864</property>
+        <!-- 池参数配置 -->
+        //二次增加连接数
+        <property name="acquireIncrement">5</property>
+        //初始连接数
+        <property name="initialPoolSize">10</property>
+        <property name="minPoolSize">5</property>
+        <property name="maxPoolSize">20</property>
+        //连接释放时未提交事务回滚
+        <property name="autoCommitOnClose">false</property>
+
+    </default-config>
+
+</c3p0-config>

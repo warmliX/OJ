@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="OJ:war">
+    <output-path>$PROJECT_DIR$/out/artifacts/OJ_war</output-path>
+    <root id="archive" name="OJ_war.war">
+      <element id="artifact" artifact-name="OJ:war exploded" />
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/META-INF/MANIFEST.MF" />
+      </element>
+    </root>
+  </artifact>
+</component>

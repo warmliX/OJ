@@ -1,0 +1,27 @@
+#sub{
+    display: block;
+    margin: 0 auto 2.5em;
+}
+.lab{
+    margin: 1.5em 0 1.5em 0;
+}
+.lis{
+    margin: 0.8em 0.3em 0 0.3em;
+}
+.table{
+    margin-top:80px;
+}
+.container{
+    padding-top: 20px;
+    margin-bottom: 30px;
+}
+#nav1 ul{
+    position:relative; left:50%; float:left;
+}
+#nav1 ul li{
+    position:relative;right:50%; float:left;
+}
+
+.nav1{
+    height: auto;
+}
