@@ -44,7 +44,9 @@ public class Executor implements Runnable {
         }
         if(isCompile == 1){
             try {
-                Exec();
+                int[] is_exe = Exec();
+                dao = new UpdateStateDao(String.valueOf(is_exe[0]) ,is_exe[1] ,is_exe[2] ,rid);
+                dao.update();
             } catch (SQLException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -57,10 +59,11 @@ public class Executor implements Runnable {
     }
 
     public int compile(){
+
         Runtime runtime = Runtime.getRuntime();
         try {
             if(format.equals(".c")){
-                Process process = runtime.exec("cmd /c gcc S:/OnlineJudge/"+email+"/"+email+format+" -o S:/OnlineJudge/"+email+"/c"+qid+email);
+                Process process = runtime.exec("gcc /OnlineJudge/"+email+"/"+email+format+" -o /OnlineJudge/"+email+"/c"+qid+email);
                 Thread.sleep(3000);
                 if(process.isAlive()){
                     process.destroy();
@@ -71,7 +74,7 @@ public class Executor implements Runnable {
                 }
             }
             else if(format.equals(".cpp")){
-                Process process = runtime.exec("cmd /c g++ S:/OnlineJudge/"+email+"/"+email+format+" -o S:/OnlineJudge/"+email+"/cp"+qid+email);
+                Process process = runtime.exec("g++ /OnlineJudge/"+email+"/"+email+format+" -o /OnlineJudge/"+email+"/cp"+qid+email);
                 Thread.sleep(3000);
                 if(process.isAlive()){
                     process.destroy();
@@ -82,7 +85,7 @@ public class Executor implements Runnable {
                 }
             }
             else {
-                Process process = runtime.exec("cmd /c javac S:/OnlineJudge/"+email+"/Main.java");
+                Process process = runtime.exec("javac /OnlineJudge/"+email+"/Main.java");
                 Thread.sleep(3000);
                 if(process.isAlive()){
                     process.destroy();
@@ -119,16 +122,17 @@ public class Executor implements Runnable {
         return true;
     }
 
-    public int Exec() throws SQLException, IOException, InterruptedException {
+    public int[] Exec() throws SQLException, IOException, InterruptedException {
+        int time = 0,mem = 0;
         QuestionDaoFactory factory = new QuestionDaoFactory();
         Test_dataDao dao = factory.creatTest_dataDao(qid);
         ArrayList<String[]> data = dao.sel();
         Runtime runtime = Runtime.getRuntime();
         if(format.equals(".java")){
-            String exeFile = "S:/OnlineJudge/"+email+"/Main";
-            String testFile = "S:/OnlineJudge/"+email+"/jav"+qid+".txt";
-            String timeFile = "S:/OnlineJudge/"+email+"/jav"+qid+"tim.txt";
-            String memFile = "S:/OnlineJudge/"+email+"/jav"+qid+"mem.txt";
+            String exeFile = "/OnlineJudge/"+email+"/Main";
+            String testFile = "/OnlineJudge/"+email+"/jav"+qid+".txt";
+            String timeFile = "/OnlineJudge/"+email+"/jav"+qid+"tim.txt";
+            String memFile = "/OnlineJudge/"+email+"/jav"+qid+"mem.txt";
             File file = new File(testFile);
             if(!file.exists()){
                 file.createNewFile();
@@ -144,51 +148,7 @@ public class Executor implements Runnable {
 
             for(int i = 0 ;i < data.size() ;i++){
                 saveTest(testFile ,data.get(i)[0]);
-                Process process = runtime.exec("cmd /c S:/OnlineJudge/"+email+"/c"+qid+email);
-                OutputStream stream = process.getOutputStream();
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(stream));
-                writer.write(testFile+"\n");
-                writer.write(timeFile+"\n");
-                writer.write(memFile+"\n");
-                writer.close();
-                boolean isExe = process.waitFor(10 ,TimeUnit.SECONDS);
-                if(isExe) {
-                    StringBuffer stringBuffer = new StringBuffer();
-                    String line = "";
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                    while ((line = reader.readLine()) != null){
-                        stringBuffer.append(line);
-                    }
-                    System.out.println(stringBuffer.toString());
-                    if(!stringBuffer.toString().equals(data.get(i)[1])){
-                        return 5;
-                    }
-                } else{
-                    process.destroy();
-                    return 4;
-                }
-            }
-        } else if(format.equals(".c")){
-            String exeFile = "S:/OnlineJudge/"+email+"/c"+qid+".exe";
-            String testFile = "S:/OnlineJudge/"+email+"/c"+qid+"test.txt";
-            String timeFile = "S:/OnlineJudge/"+email+"/c"+qid+"tim.txt";
-            String memFile = "S:/OnlineJudge/"+email+"/c"+qid+"mem.txt";
-            File file = new File(testFile);
-            if(!file.exists()){
-                file.createNewFile();
-            }
-            file = new File(timeFile);
-            if(!file.exists()){
-                file.createNewFile();
-            }
-            file = new File(memFile);
-            if(!file.exists()){
-                file.createNewFile();
-            }
-
-            for(int i = 0 ;i < data.size() ;i++){
-                saveTest(testFile ,data.get(i)[0]);
-                Process process = runtime.exec("cmd /c S:/OnlineJudge/"+email+"/c"+qid+email);
+                Process process = runtime.exec("/OnlineJudge/java_oj/mem_time > /OnlineJudge/end.txt");
                 OutputStream stream = process.getOutputStream();
                 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(stream));
                 writer.write(exeFile+"\n");
@@ -206,20 +166,18 @@ public class Executor implements Runnable {
                     }
                     System.out.println(stringBuffer.toString());
                     if(!stringBuffer.toString().equals(data.get(i)[1])){
-                        return 5;
+                        return new int[]{5 ,0 ,0};
                     }
                 } else{
-                    System.out.print("destory");
-                    process.destroyForcibly();
-                    System.out.print(process.isAlive());
-                    return 4;
+                    process.destroy();
+                    return new int[]{4 ,0 ,0};
                 }
             }
-        } else{
-            String exeFile = "S:/OnlineJudge/"+email+"/cp"+qid+".exe";
-            String testFile = "S:/OnlineJudge/"+email+"/cp"+qid+"test.txt";
-            String timeFile = "S:/OnlineJudge/"+email+"/cp"+qid+"tim.txt";
-            String memFile = "S:/OnlineJudge/"+email+"/cp"+qid+"mem.txt";
+        } else if(format.equals(".c")){
+            String exeFile = "/OnlineJudge/"+email+"/c"+qid+email;
+            String testFile = "/OnlineJudge/"+email+"/c"+qid+"test.txt";
+            String timeFile = "/OnlineJudge/"+email+"/c"+qid+"tim.txt";
+            String memFile = "/OnlineJudge/"+email+"/c"+qid+"mem.txt";
             File file = new File(testFile);
             if(!file.exists()){
                 file.createNewFile();
@@ -234,19 +192,17 @@ public class Executor implements Runnable {
             }
 
             for(int i = 0 ;i < data.size() ;i++){
-                System.out.println(i);
                 saveTest(testFile ,data.get(i)[0]);
-                Process process = runtime.exec("cmd /c S:/OnlineJudge/"+email+"/cp"+qid+email);
+                Process process = runtime.exec("/usr/bin/sh");
                 OutputStream stream = process.getOutputStream();
-                BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(stream));
-                bw.write(exeFile+"\n");
-                bw.write(testFile+"\n");
-                bw.write(timeFile+"\n");
-                bw.write(memFile+"\n");
-                bw.close();
-                stream.close();
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(stream));
+                writer.write("/OnlineJudge/c_oj/mem_safe\n");
+                writer.write(exeFile+"\n");
+                writer.write(testFile+"\n");
+                writer.write(timeFile+"\n");
+                writer.write(memFile+"\n");
+                writer.close();
                 boolean isExe = process.waitFor(10 ,TimeUnit.SECONDS);
-                System.out.print(isExe);
                 if(isExe) {
                     StringBuffer stringBuffer = new StringBuffer();
                     String line = "";
@@ -255,20 +211,81 @@ public class Executor implements Runnable {
                         stringBuffer.append(line);
                     }
                     reader.close();
-                    System.out.println("start");
-                    System.out.print(stringBuffer.toString());
-                    System.out.println("end");
-                    process.destroy();
-                    if(!stringBuffer.toString().equals(data.get(i)[1])){
-                        return 5;
+                    int memIndex = stringBuffer.indexOf("mem=");
+                    int timeIndex = stringBuffer.indexOf("time=");
+                    if(memIndex>0 & timeIndex>0) {
+                        String outcome = stringBuffer.toString().substring(0, memIndex);
+                        mem += Integer.parseInt(stringBuffer.substring(memIndex + 4, timeIndex));
+                        time += Integer.parseInt(stringBuffer.substring(timeIndex + 5, stringBuffer.length()));
+
+                        if (!outcome.replace(" " ,"").replace("\n" ,"").replace("\r" ,"").
+                                toString().equals(data.get(i)[1].replace(" " ,""))) {
+                            return new int[]{5, 0, 0};
+                        }
+                    }else{
+                        return new int[]{5 ,0 ,0};
+                    }
+                } else{
+                    System.out.print("destory");
+                    process.destroyForcibly();
+                    System.out.print(process.isAlive());
+                    return new int[]{4 ,0 ,0};
+                }
+            }
+        } else{
+            String exeFile = "/OnlineJudge/"+email+"/cp"+qid+email;
+            String testFile = "/OnlineJudge/"+email+"/cp"+qid+"test.txt";
+            String timeFile = "/OnlineJudge/"+email+"/cp"+qid+"tim.txt";
+            String memFile = "/OnlineJudge/"+email+"/cp"+qid+"mem.txt";
+            File file = new File(testFile);
+            if(!file.exists()){
+                file.createNewFile();
+            }
+            file = new File(timeFile);
+            if(!file.exists()){
+                file.createNewFile();
+            }
+            file = new File(memFile);
+            if(!file.exists()){
+                file.createNewFile();
+            }
+
+            for(int i = 0 ;i < data.size() ;i++){
+                saveTest(testFile ,data.get(i)[0]);
+                Process process = runtime.exec("/usr/bin/sh");
+                OutputStream stream = process.getOutputStream();
+                BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(stream));
+                bw.write("/OnlineJudge/c_oj/mem_safe>/OnlineJudge/end.txt\n");
+                bw.write(exeFile+"\n");
+                bw.write(testFile+"\n");
+                bw.write(timeFile+"\n");
+                bw.write(memFile+"\n");
+                bw.close();
+                stream.close();
+                boolean isExe = process.waitFor(10 ,TimeUnit.SECONDS);
+                if(isExe) {
+                    StringBuffer stringBuffer = new StringBuffer();
+                    String line = "";
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                    while ((line = reader.readLine()) != null){
+                        stringBuffer.append(line);
+                    }
+                    reader.close();
+                    int memIndex = stringBuffer.indexOf("mem=");
+                    int timeIndex = stringBuffer.indexOf("time=");
+                    String outcome = stringBuffer.toString().substring(0 ,memIndex);
+                    mem += Integer.parseInt(stringBuffer.substring(memIndex+4 ,timeIndex));
+                    time += Integer.parseInt(stringBuffer.substring(timeIndex+5 ,stringBuffer.length()));
+                    if(!outcome.equals(data.get(i)[1])){
+                        return new int[]{5 ,0 ,0};
                     }
                 } else{
                     process.destroy();
-                    return 4;
+                    return new int[]{4 ,0 ,0};
                 }
             }
         }
-        return 6;
+        return new int[]{6 ,time/data.size() ,mem/data.size()};
     }
 
     public void saveTest(String testFile ,String paramter) throws IOException {

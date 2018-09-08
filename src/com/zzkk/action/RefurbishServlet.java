@@ -19,6 +19,7 @@ public class RefurbishServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String path = request.getContextPath();
         int page = Integer.parseInt(request.getParameter("page"));
+        response.setCharacterEncoding("utf-8");
         boolean flag = false;
         RecordDaoFactory factory = new RecordDaoFactory();
         RefurbishDao dao = factory.createRefurbishDao((String) request.getSession().getAttribute("usr"),page ,5);
@@ -38,14 +39,24 @@ public class RefurbishServlet extends HttpServlet {
                 case "2":language = "C++";break;
                 case "3":language = "JAVA";break;
             }
+            String stat = new String();
+            switch (strings[2]){
+                case "0":stat = "Compiling";break;
+                case "1":stat = "Running";break;
+                case "2":stat = "Out of compile";break;
+                case "3":stat = "Compile Error";break;
+                case "4":stat = "Out of runtime";break;
+                case "5":stat = "Wrong answer";break;
+                case "6":stat = "Accept";break;
+            }
             string+="<tr>" +
                     "<td>"+strings[0]+"</td>" +
                     "<td><a href='"+path+"/com/zzkk/action/QuestionContentServlet?qid="+strings[0]+"'>"+strings[1]+"</a></td>" +
-                    "<td>"+strings[2]+"</td>" +
+                    "<td>"+stat+"</td>" +
                     "<td>"+strings[3]+"</td>" +
-                    "<td>"+strings[5]+"</td>" +
+                    "<td>"+strings[5]+"ms</td>" +
                     "<td>"+language+"</td>" +
-                    "<td>"+strings[6]+"</td>" +
+                    "<td>"+strings[6]+"KB</td>" +
                     "<td>"+strings[7]+"</td>" +
                     "</tr>";
         }

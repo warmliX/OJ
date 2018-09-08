@@ -29,7 +29,7 @@ public class TestFile implements Callable<Boolean> {
     public Boolean call() throws IOException {
         if(format == null || format.equals(""))
             return false;
-        File file = new File("S:/OnlineJudge/"+email+"/"+format);
+        File file = new File("/OnlineJudge/"+email+"/"+format);
         FileOutputStream outputStream = new FileOutputStream(file);
         byte[] bytes = text.getBytes();
         outputStream.write(bytes);

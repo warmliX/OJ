@@ -26,13 +26,16 @@ public class LoginServlet extends javax.servlet.http.HttpServlet {
                 flag = false;
         }
         if(flag == false){
-            response.sendRedirect(path+"/Web/login/index.jsp?error=yes");
+            response.sendRedirect(path+"/Web/login/index.jsp?error=isLoad");
         } else {
             UserDaoFactory factory = new UserDaoFactory();
             LoadUserDao Luser = factory.createLoadUser(email);
             UserBean user = Luser.Load();
-            response.getWriter().write(user.getPassword());
-            if (user.getPassword().equals(password)) {
+            //response.getWriter().write(user.getPassword());
+            if(user.getPassword() == null){
+                response.sendRedirect(path+"/Web/login/index.jsp?error=noUser");
+            }
+            else if (user.getPassword().equals(password)) {
                 usr = new ConcurrentHashMap<>();
                 usr.put(email, email);
                 context.setAttribute("usr", usr);

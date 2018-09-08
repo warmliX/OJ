@@ -55,8 +55,14 @@
     }
 
     var errori ='<%=request.getParameter("error")%>';
-    if(errori=='yes'){
-        alert("登录失败!");
+    if(errori=='isLoad'){
+        alert("账号已登陆!");
+    }
+    else if(errori=='noUser'){
+        alert("用户不存在!");
+    }
+    else if(errori=="yes"){
+        alert("密码错误!");
     }
 </script>
 </html>

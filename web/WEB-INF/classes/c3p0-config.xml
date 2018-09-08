@@ -3,10 +3,10 @@
     <!-- 这是默认配置信息 -->
     <default-config>
         <!-- 连接四大参数配置 -->
-        <property name="jdbcUrl">jdbc:mysql://localhost/onlinejudge?useSSL=false&amp;serverTimezone=UTC</property>
+        <property name="jdbcUrl">jdbc:mysql://localhost/OnlineJudge?useSSL=false&amp;serverTimezone=UTC</property>
         <property name="driverClass">com.mysql.cj.jdbc.Driver</property>
         <property name="user">root</property>
-        <property name="password">986864</property>
+        <property name="password">ZZKKsyxl2018;</property>
         <!-- 池参数配置 -->
         //二次增加连接数
         <property name="acquireIncrement">5</property>

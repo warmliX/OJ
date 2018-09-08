@@ -122,16 +122,26 @@
                             case "2":language = "C++";break;
                             case "3":language = "JAVA";break;
                         }
+                        String stat = new String();
+                        switch (data[2]){
+                            case "0":stat = "Compiling";break;
+                            case "1":stat = "Running";break;
+                            case "2":stat = "Out of compile";break;
+                            case "3":stat = "Compile Error";break;
+                            case "4":stat = "Out of runtime";break;
+                            case "5":stat = "Wrong answer";break;
+                            case "6":stat = "Accept";break;
+                        }
                         int qid = Integer.parseInt(data[0]);
                         %>
                 <tr>
                     <td><%=data[0]%></td>
                     <td><a href= "<%=path%>/com/zzkk/action/QuestionContentServlet?qid=<%=qid%>"><%=data[1]%></a></td>
-                    <td><%=data[2]%></td>
+                    <td><%=stat%></td>
                     <td><%=data[3]%></td>
-                    <td><%=data[5]%></td>
+                    <td><%=data[5]+"ms"%></td>
                     <td><%=language%></td>
-                    <td><%=data[6]%></td>
+                    <td><%=data[6]+"KB"%></td>
                     <td><%=data[7]%></td>
                 </tr>
                         <%
