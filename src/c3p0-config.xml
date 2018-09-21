@@ -13,7 +13,7 @@
         //初始连接数
         <property name="initialPoolSize">10</property>
         <property name="minPoolSize">5</property>
-        <property name="maxPoolSize">20</property>
+        <property name="maxPoolSize">100</property>
         //连接释放时未提交事务回滚
         <property name="autoCommitOnClose">false</property>
 

@@ -100,6 +100,7 @@
                     totalPage = bean.getTotalPage();
                     int currentPage = bean.getCurrentPage();
                     ArrayList<String[]> list = bean.getList();
+                    if(list != null){
                     for(int i = 0 ; i < list.size() ; i++){
                         String[] data = list.get(i);
                         double SA = 0;
@@ -152,6 +153,7 @@
                     </tbody>
                     <li><a href="javascript:sub(<%=totalPage%>);"><i class="fa fa-angle-right">»</i></a></li>
                     <%
+                            }
                         }
                     %>
                 </ul>

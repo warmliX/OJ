@@ -273,10 +273,16 @@ public class Executor implements Runnable {
                     reader.close();
                     int memIndex = stringBuffer.indexOf("mem=");
                     int timeIndex = stringBuffer.indexOf("time=");
-                    String outcome = stringBuffer.toString().substring(0 ,memIndex);
-                    mem += Integer.parseInt(stringBuffer.substring(memIndex+4 ,timeIndex));
-                    time += Integer.parseInt(stringBuffer.substring(timeIndex+5 ,stringBuffer.length()));
-                    if(!outcome.equals(data.get(i)[1])){
+                    if(memIndex>0 & timeIndex>0) {
+                        String outcome = stringBuffer.toString().substring(0, memIndex);
+                        mem += Integer.parseInt(stringBuffer.substring(memIndex + 4, timeIndex));
+                        time += Integer.parseInt(stringBuffer.substring(timeIndex + 5, stringBuffer.length()));
+                        if (!outcome.replace(" " ,"").replace
+                                ("\n" ,"").replace("\r" ,"").
+                                equals(data.get(i)[1].replace(" " ,""))) {
+                            return new int[]{5, 0, 0};
+                        }
+                    }else{
                         return new int[]{5 ,0 ,0};
                     }
                 } else{

@@ -31,6 +31,8 @@
     <!--JS for animate-->
     <link href="<%=path%>/Web/css/animate.css" rel="stylesheet" type="text/css" media="all">
     <script src="<%=path%>/Web/js/wow.min.js"></script>
+    <script src="<%=path%>/Web/js/auto-line-number.js"></script>
+
     <script>
         new WOW().init();
     </script>
@@ -41,26 +43,21 @@
     </style>
 </head>
 <body>
-<%
-String email = (String) request.getSession().getAttribute("usr");
-if(email == null){
-    response.sendRedirect(path+"/Web/login/index.jsp");
-}
-%>
+
 <div class="header head">
     <div class="container">
         <div class="heder-top">
             <div class="logo">
-                <h1><a href="<%=path%>/Web/index.jsp">Online Judge</a></h1>
+                <h1><a href="<%=path%>/Web/wrong.html<%--/Web/index.jsp--%>">Online Judge</a></h1>
             </div>
             <div class="nav-icon">
                 <a href="#" class="navicon"></a>
                 <div class="toggle">
                     <ul class="toggle-menu">
-                        <li><a href="index.jsp">主页</a></li>
-                        <li><a  href="<%=path%>/com/zzkk/action/QuestionListServlet?page=1">编程练习</a></li>
+                        <li><a href="<%=path%>/Web/wrong.jsp<%--index.jsp--%>">主页</a></li>
+                        <li><a  href="<%=path%>/Web/wrong.jsp<%--/com/zzkk/action/QuestionListServlet?page=1--%>">编程练习</a></li>
                         <li><a  href="<%=path%>/Web/cont.jsp"  class="active">代码测试</a></li>
-                        <li><a  href="<%=path%>/com/zzkk/action/RecordServlet?page=1">练习记录</a></li>
+                        <li><a  href="<%=path%>/Web/wrong.jsp<%--/com/zzkk/action/RecordServlet?page=1--%>">练习记录</a></li>
                     </ul>
                 </div>
                 <script>
@@ -101,13 +98,15 @@ if(email == null){
                 </ul>
                 <div class="contact-grids" id="div2">
                     <div class="col-md-6 contact-grid wow fadeInLeft animated animated" data-wow-delay="0.4s">
-                        <form>
+                        <%--<form id="form1" method="post">--%>
                             <div class="row1">
                                 <label>代码：</label>
-                                <textarea placeholder="请输入你的代码" id="code"></textarea>
+                                <textarea id="lang" name="language" style="height:0px;width:0px;visibility: hidden">c</textarea>
+                                <textarea id="code" placeholder="请输入你的代码" onkeydown="tab(this)"></textarea>
                             </div>
-                            <button class="btn btn-success" id="subCode">确定</button>
-                        </form>
+                            <br/>
+                            <button class="btn btn-success" id="subCode" onclick="sub()">确定</button>
+                        <%--</form>--%>
                     </div>
                     <div class="col-md-6 contact-grid  wow fadeInRight animated animated" data-wow-delay="0.4s">
                         <div class="row1">
@@ -118,6 +117,7 @@ if(email == null){
                     </div>
                     <div class="clearfix"></div>
                 </div>
+                <br/>
                 <div id="div1" style="float: right">
                     <button class="btn btn-success" style="margin-right: 1ex">搜索错误信息</button>
                     <button class="btn btn-success">分享到QQ</button>
@@ -142,20 +142,59 @@ if(email == null){
     </div>
 </div>
 </body>
+<script>
+    $(document).ready(function(){
+        $("#subCode").click(function(){
+            var oCode=document.getElementById("code").value;
+            var language = document.getElementById("lang").value;
+            var paramter = prompt("输入你的参数（用空格隔开哦）");
+            if(oCode!=''||oCode!=null){
+                document.getElementById("subCode").disabled=true;
+                $.post("<%=path%>/com/zzkk/action/CodeTestServlet",
+                    {
+                        code:oCode,
+                        language:language,
+                        paramter:paramter
+                    },
+                    function(status){
+                        document.getElementById("subCode").disabled=false;
+                        document.getElementById('result').innerHTML=status;
+                    });
+            }
+        });
+    });
+</script>
+
 <script type="text/javascript">
-    document.getElementById('subCode').onclick=function () {
+    $("#code").setTextareaCount({
+        width: "30px",
+        bgColor: "#AFEEEE",
+        color: "#000000",
+        display: "inline-block"
+    });
+</script>
+
+    <%--/*var xmlhttp;
+    document.getElementById('subCode').onclick=function sub() {
         var oCode=document.getElementById('code').value;
         if (oCode!=''){
-            this.disabled=true;
-            var xhr=new XMLHttpRequest();
-            xhr.open('get','003.php?code='+oCode);
-            xhr.onload=function () {
-                document.getElementById('result').value=xhr.responseText;
-                document.getElementById('subCode').disabled=false;
-            }
-            xhr.send(null);
+            var paramter = prompt("输入你的参数（用空格隔开哦）");
+            var language = document.getElementById("lang").value;
+            var url = "&lt;%&ndash;<%=path%>&ndash;%&gt;/com/zzkk/action/CodeTestServlet?code="+oCode+"&language="+language+"&paramter="+paramter;
+            xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange=checkResult;
+            xmlhttp.open("POST",url,true);
+            xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+            xmlhttp.send("flag=true");
         }
     }
+
+    function checkResult(){
+        if (xmlhttp.readyState==4 && xmlhttp.status==200)
+            document.getElementById('result').innerHTML=xmlhttp.responseText;
+    }*/--%>
+
+<script type="text/javascript">
     var lis=document.getElementsByTagName('li');
     for(var i=0;i<lis.length;i++)
     {
@@ -165,7 +204,29 @@ if(email == null){
                 lis[j].className='';
             }
             this.className='active';
+            document.getElementById("lang").innerHTML=this.getAttribute("id");
+            if(this.getAttribute("id")=="java"){
+                alert("请将类名设置为 Main !");
+                document.getElementById("code").innerHTML="public class Main{\n" +
+                    "   public static void main(String[] args){\n" +
+                    "\n" +
+                    "   }\n" +
+                    "}\n"
+            }else{
+                document.getElementById("code").innerHTML="";
+            }
         }
     }
 </script>
+
+<script type="text/javascript">
+    function tab(obj){
+        if (event.keyCode == 9)
+        {
+            obj.value = obj.value + "   "; // 跳几格由你自已决定
+            event.returnValue = false;
+        }
+    }
+</script>
+
 </html>

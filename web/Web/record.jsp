@@ -114,6 +114,7 @@
                         int totalCount = bean.getTotalCount();//数据总数
                         int totalPage = bean.getTotalPage();//总页数
                         ArrayList<String[]> list = bean.getList();
+                        if(list != null){
                         for(int i=0 ;i< list.size() ;i++){
                         String[] data = list.get(i);
                         String language = new String();
@@ -146,6 +147,7 @@
                 </tr>
                         <%
                         }
+                            }
                         %>
             </tbody>
         </table>

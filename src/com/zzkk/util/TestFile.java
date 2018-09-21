@@ -19,7 +19,7 @@ public class TestFile implements Callable<Boolean> {
 
             case "java" : this.format = "Main.java";break;
 
-            default:return;
+            default:break;
         }
         this.email = email;
         this.text = text;
@@ -27,13 +27,14 @@ public class TestFile implements Callable<Boolean> {
 
     @Override
     public Boolean call() throws IOException {
-        if(format == null || format.equals(""))
+        if(format == null || format.equals("")) {
             return false;
+        }
+
         File file = new File("/OnlineJudge/"+email+"/"+format);
         FileOutputStream outputStream = new FileOutputStream(file);
         byte[] bytes = text.getBytes();
         outputStream.write(bytes);
-        System.out.println("save success");
         outputStream.close();
         return true;
     }

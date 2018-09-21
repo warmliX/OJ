@@ -94,6 +94,15 @@
         <url-pattern>/com/zzkk/action/AlterServlet</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>CodeTestServlet</servlet-name>
+        <servlet-class>com.zzkk.action.CodeTestServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CodeTestServlet</servlet-name>
+        <url-pattern>/com/zzkk/action/CodeTestServlet</url-pattern>
+    </servlet-mapping>
+
     <listener>
         <listener-class>com.zzkk.util.SessionListener</listener-class>
     </listener>

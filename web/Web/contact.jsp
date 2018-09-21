@@ -114,7 +114,7 @@
                                 <form action="<%=path%>/com/zzkk/action/SubServlet" method="post" id="form">
                                     <textarea name="qid" style="height:0px;width:0px;visibility: hidden"><%=request.getAttribute("qid")%></textarea>
                                     <textarea id="lang" name="language" style="height:0px;width:0px;visibility: hidden"></textarea>
-                                    <textarea name="text" placeholder="请输入你的代码" id="text1"></textarea>
+                                    <textarea name="text" onkeydown="tab(this)" placeholder="请输入你的代码" id="text1"></textarea>
                                 </form>
                             </div>
                             <button id="inp1" onclick="sub()" class="btn btn-success">确定</button>
@@ -140,9 +140,6 @@
     </div>
 </div>
 
-
-
-
 <div class="footer-section wow fadeInDownBig animated animated" data-wow-delay="0.4s">
     <div class="container">
         <div class="copy">
@@ -153,6 +150,22 @@
 <%}%>
 </body>
 <script type="text/javascript">
+    $("textarea").on(
+        'keydown',
+        function(e) {
+            if (e.keyCode == 9) {
+                e.preventDefault();
+                var indent = '    ';
+                var start = this.selectionStart;
+                var end = this.selectionEnd;
+                var selected = window.getSelection().toString();
+                selected = indent + selected.replace(/\n/g, '\n' + indent);
+                this.value = this.value.substring(0, start) + selected
+                    + this.value.substring(end);
+                this.setSelectionRange(start + indent.length, start
+                    + selected.length);
+            }
+        })
     var lis=document.getElementsByTagName('li');
     for(var i=0;i<lis.length;i++)
     {
