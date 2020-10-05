@@ -1,7 +1,7 @@
 package com.zzkk.bean;
 
 public class RecordBean {
-
+//
     private int qid;
     private int state;
     private int language;
