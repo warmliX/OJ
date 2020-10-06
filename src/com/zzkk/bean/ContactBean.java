@@ -7,7 +7,7 @@ public class ContactBean {
     private String source;
     private String paramter;
     private String outcome;
-
+//
     public String getQname() {
         return qname;
     }
