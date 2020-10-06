@@ -1,7 +1,7 @@
 package com.zzkk.bean;
 
 import java.util.ArrayList;
-//testsafsdxvxvxxcxzcxzcxzccxzcxzvxvxv
+//testsafsdxvxvxx
 public class PageBean {
     private int currentPage;//当前页
     private int pageCount;//每页数据数
