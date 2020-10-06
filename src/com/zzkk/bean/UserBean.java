@@ -6,7 +6,7 @@ public class UserBean {
     private String password;
     private String uquestion;
     private String uanswer;
-
+////
     public String getEmail() {
         return email;
     }
