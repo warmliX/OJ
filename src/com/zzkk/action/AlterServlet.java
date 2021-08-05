@@ -21,7 +21,7 @@ public class AlterServlet extends HttpServlet {
         UserDaoFactory factory = new UserDaoFactory();
         AlterUserDao dao = factory.createAlterUserDao(email ,password);
         try {
-            String answer = dao.sel();
+            String answer = dao.sels();
             System.out.println(answer);
             if(answer==null){
                 response.getWriter().write("<script type='text/javascript'>if(confirm('用户名错误'))window.history.go(-1);" +
